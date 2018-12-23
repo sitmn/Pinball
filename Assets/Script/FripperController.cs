@@ -10,7 +10,7 @@ public class FripperController : MonoBehaviour {
     private float flickAngle = -20;
 
     private int rightid, leftid;
-
+    private bool righttouch, lefttouch;
 
     // Use this for initialization
     void Start () {
@@ -41,8 +41,7 @@ public class FripperController : MonoBehaviour {
         }
 
         //追加課題
-        if(Input.touchCount > 0)
-        {
+        
             foreach(Touch touch in Input.touches)
             {
                 
@@ -50,39 +49,43 @@ public class FripperController : MonoBehaviour {
                 switch (touch.phase)
                 {
                     case TouchPhase.Began:
-                        if (touch.position.x >= 286 && tag == "RightFripperTag") 
+                        if (touch.position.x >= Screen.width / 2 && tag == "RightFripperTag" && righttouch == false) 
                         {
                             SetAngle(this.flickAngle);
                             rightid = touch.fingerId;
+                            righttouch = true;
 
-                        }else if(touch.position.x < 286 && tag == "LeftFripperTag")
+                        }else if(touch.position.x < Screen.width / 2 && tag == "LeftFripperTag" && lefttouch == false)
                         {
                             SetAngle(this.flickAngle);
                             leftid = touch.fingerId;
+                            lefttouch = true;
                         }
                         break;
 
 
                     case TouchPhase.Ended:
-                        if (tag == "RightFripperTag" && rightid == touch.fingerId)
+                    if (tag == "RightFripperTag" && rightid == touch.fingerId && righttouch == true)
                         {
                             SetAngle(this.defaultAngle);
+                            righttouch = false;
                         }
-                        else if (tag == "LeftFripperTag" && leftid == touch.fingerId)
+                        else if (tag == "LeftFripperTag" && leftid == touch.fingerId && lefttouch == true)
                         {
                             SetAngle(this.defaultAngle);
+                            lefttouch = false;
                         }
                         break;
                 }
             }
-        }
-
 	}
 
     void SetAngle(float angle)
     {
+        
         JointSpring JointSpr = this.myHingeJoint.spring;
         JointSpr.targetPosition = angle;
         this.myHingeJoint.spring = JointSpr;
+        
     }
 }

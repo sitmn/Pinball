@@ -44,6 +44,7 @@ public class ScoreController : MonoBehaviour {
             this.point = largecloudhit;
         }
 
+        this.scoretext.text = "score" + ballcontroller.score;
     }
 	
 	// Update is called once per frame
